@@ -1,4 +1,3 @@
-# Import necessary libraries
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -6,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.api import VAR
 from statsmodels.tsa.statespace.varmax import VARMAX
 from statsmodels.tsa.arima.model import ARIMA
@@ -17,16 +15,9 @@ import matplotlib.pyplot as plt
 # Load NIFTY data
 nifty_data = pd.read_excel("NIFTY.xlsx")
 
-# Print available columns in the 'NIFTY.xlsx' file
-print("Columns in NIFTY data:", nifty_data.columns)
-
 # Load FII data
 equity_data = pd.read_excel("FII.xlsx", sheet_name="Equity")
 debt_data = pd.read_excel("FII.xlsx", sheet_name="Debt")
-
-# Print available columns in the 'Equity' and 'Debt' sheets
-print("Columns in Equity data:", equity_data.columns)
-print("Columns in Debt data:", debt_data.columns)
 
 # Merge NIFTY, Equity, and Debt data
 merged_data = pd.merge(nifty_data, equity_data, on="Date", how="left")
@@ -135,154 +126,40 @@ var_model_debt = VAR(merged_data[["Percentage Change", "Debt Net Investment"]])
 var_result_debt = var_model_debt.fit()
 var_pred_debt = var_result_debt.forecast(merged_data[["Percentage Change", "Debt Net Investment"]].values, steps=len(X_test_debt))
 
-# Plotting for Equity
-st.title("FII Equity Predictive Modeling")
-st.subheader("Linear Regression Model for Equity")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, linear_pred_equity, label="Linear Regression Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("Random Forest Regression Model for Equity")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, rf_pred_equity, label="Random Forest Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("Gradient Boosting Regression Model for Equity")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, gb_pred_equity, label="Gradient Boosting Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("LSTM Model for Equity")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, lstm_pred_equity, label="LSTM Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("ARIMA Model for Equity")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, arima_pred_equity, label="ARIMA Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("VAR Model for Equity")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, var_pred_equity[:, 0], label="VAR Prediction")
-plt.legend()
-st.pyplot(plt)
-
-# Plotting for Debt
-st.title("FII Debt Predictive Modeling")
-st.subheader("Linear Regression Model for Debt")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, linear_pred_debt, label="Linear Regression Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("Random Forest Regression Model for Debt")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, rf_pred_debt, label="Random Forest Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("Gradient Boosting Regression Model for Debt")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, gb_pred_debt, label="Gradient Boosting Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("LSTM Model for Debt")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, lstm_pred_debt, label="LSTM Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("ARIMA Model for Debt")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, arima_pred_debt, label="ARIMA Prediction")
-plt.legend()
-st.pyplot(plt)
-
-st.subheader("VAR Model for Debt")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual")
-plt.plot(y_test.index, var_pred_debt[:, 0], label="VAR Prediction")
-plt.legend()
-st.pyplot(plt)
-
-# Plotting for Equity and NIFTY
-st.title("Comparison of Equity Predictions with NIFTY Percentage Change")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual NIFTY Percentage Change")
-plt.plot(y_test.index, linear_pred_equity, label="Linear Regression Prediction for Equity")
-plt.plot(y_test.index, rf_pred_equity, label="Random Forest Prediction for Equity")
-plt.plot(y_test.index, gb_pred_equity, label="Gradient Boosting Prediction for Equity")
-plt.plot(y_test.index, lstm_pred_equity, label="LSTM Prediction for Equity")
-plt.plot(y_test.index, arima_pred_equity, label="ARIMA Prediction for Equity")
-plt.plot(y_test.index, var_pred_equity[:, 0], label="VAR Prediction for Equity")
-plt.legend()
-st.pyplot(plt)
-
-# Plotting for Debt and NIFTY
-st.title("Comparison of Debt Predictions with NIFTY Percentage Change")
-plt.figure(figsize=(10, 4))
-plt.plot(y_test.index, y_test, label="Actual NIFTY Percentage Change")
-plt.plot(y_test.index, linear_pred_debt, label="Linear Regression Prediction for Debt")
-plt.plot(y_test.index, rf_pred_debt, label="Random Forest Prediction for Debt")
-plt.plot(y_test.index, gb_pred_debt, label="Gradient Boosting Prediction for Debt")
-plt.plot(y_test.index, lstm_pred_debt, label="LSTM Prediction for Debt")
-plt.plot(y_test.index, arima_pred_debt, label="ARIMA Prediction for Debt")
-plt.plot(y_test.index, var_pred_debt[:, 0], label="VAR Prediction for Debt")
-plt.legend()
-st.pyplot(plt)
-
 # Plotting for Equity and NIFTY (Date-wise)
 st.title("Comparison of Equity Predictions with NIFTY Percentage Change (Date-wise)")
+plt.figure(figsize=(10, 6))
 for i in range(len(y_test)):
     date = y_test.index[i]
     
-    plt.figure(figsize=(6, 4))
-    plt.plot([date, date], [y_test.iloc[i], linear_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], rf_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], gb_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], lstm_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], arima_pred_equity.iloc[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], var_pred_equity[i, 0]], label="Actual and Predicted NIFTY Percentage Change")
-    
-    plt.title(f"Date: {date}")
-    plt.xlabel("Model Predictions")
-    plt.ylabel("NIFTY Percentage Change")
-    plt.legend()
-    st.pyplot(plt)
+    plt.plot([date, date], [y_test.iloc[i], linear_pred_equity[i]], label="Linear Regression")
+    plt.plot([date, date], [y_test.iloc[i], rf_pred_equity[i]], label="Random Forest")
+    plt.plot([date, date], [y_test.iloc[i], gb_pred_equity[i]], label="Gradient Boosting")
+    plt.plot([date, date], [y_test.iloc[i], lstm_pred_equity[i]], label="LSTM")
+    plt.plot([date, date], [y_test.iloc[i], arima_pred_equity.iloc[i]], label="ARIMA")
+    plt.plot([date, date], [y_test.iloc[i], var_pred_equity[i, 0]], label="VAR")
+
+plt.title("Equity Predictions vs. NIFTY Percentage Change (Date-wise)")
+plt.xlabel("Date")
+plt.ylabel("NIFTY Percentage Change")
+plt.legend()
+st.pyplot(plt)
 
 # Plotting for Debt and NIFTY (Date-wise)
 st.title("Comparison of Debt Predictions with NIFTY Percentage Change (Date-wise)")
+plt.figure(figsize=(10, 6))
 for i in range(len(y_test)):
     date = y_test.index[i]
     
-    plt.figure(figsize=(6, 4))
-    plt.plot([date, date], [y_test.iloc[i], linear_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], rf_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], gb_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], lstm_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], arima_pred_debt.iloc[i]], label="Actual and Predicted NIFTY Percentage Change")
-    plt.plot([date, date], [y_test.iloc[i], var_pred_debt[i, 0]], label="Actual and Predicted NIFTY Percentage Change")
-    
-    plt.title(f"Date: {date}")
-    plt.xlabel("Model Predictions")
-    plt.ylabel("NIFTY Percentage Change")
-    plt.legend()
-    st.pyplot(plt)
+    plt.plot([date, date], [y_test.iloc[i], linear_pred_debt[i]], label="Linear Regression")
+    plt.plot([date, date], [y_test.iloc[i], rf_pred_debt[i]], label="Random Forest")
+    plt.plot([date, date], [y_test.iloc[i], gb_pred_debt[i]], label="Gradient Boosting")
+    plt.plot([date, date], [y_test.iloc[i], lstm_pred_debt[i]], label="LSTM")
+    plt.plot([date, date], [y_test.iloc[i], arima_pred_debt.iloc[i]], label="ARIMA")
+    plt.plot([date, date], [y_test.iloc[i], var_pred_debt[i, 0]], label="VAR")
+
+plt.title("Debt Predictions vs. NIFTY Percentage Change (Date-wise)")
+plt.xlabel("Date")
+plt.ylabel("NIFTY Percentage Change")
+plt.legend()
+st.pyplot(plt)
