@@ -7,7 +7,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error
-from sklearn.neural_network import MLPRegressor
 from statsmodels.tsa.api import VAR
 from statsmodels.tsa.statespace.varmax import VARMAX
 from statsmodels.tsa.arima.model import ARIMA
@@ -15,16 +14,22 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 import matplotlib.pyplot as plt
 
-# Load Nifty data
+# Load NIFTY data
 nifty_data = pd.read_excel("NIFTY.xlsx")
 
-# Load Equity and Debt data
-equity_data = pd.read_excel("FII.xlsx", sheet_name="Equity")
-debt_data = pd.read_excel("FII.xlsx", sheet_name="Debt")
+# Check if 'Date' column exists in nifty_data
+if 'Date' not in nifty_data.columns:
+    raise KeyError("Column 'Date' not found in NIFTY data.")
 
-# Merge Nifty, Equity, and Debt data
-merged_data = pd.merge(nifty_data, equity_data, on="Date", how="left")
-merged_data = pd.merge(merged_data, debt_data, on="Date", how="left")
+# Load FII data
+fii_data = pd.read_excel("FII.xlsx", sheet_name="Equity")  # Assuming the Equity sheet is used
+
+# Check if 'Date' column exists in fii_data
+if 'Date' not in fii_data.columns:
+    raise KeyError("Column 'Date' not found in FII data.")
+
+# Merge NIFTY and FII data
+merged_data = pd.merge(nifty_data, fii_data, on="Date", how="left")
 
 # Drop missing values
 merged_data = merged_data.dropna()
@@ -34,7 +39,7 @@ merged_data["Year"] = merged_data["Date"].dt.year
 merged_data["Month"] = merged_data["Date"].dt.month
 
 # Define features and target variable
-features = ["Equity Net Investment", "Debt Net Investment"]
+features = ["Equity Net Investment"]  # Assuming only Equity Net Investment is used
 target = "Percentage Change"
 
 # Split data into training and testing sets
@@ -83,9 +88,9 @@ arima_result = arima_model.fit()
 arima_pred = arima_result.predict(start=len(merged_data), end=len(merged_data) + len(X_test) - 1, typ='levels')
 
 # VAR model
-var_model = VAR(merged_data[["Percentage Change", "Equity Net Investment", "Debt Net Investment"]])
+var_model = VAR(merged_data[["Percentage Change", "Equity Net Investment"]])
 var_result = var_model.fit()
-var_pred = var_result.forecast(merged_data[["Percentage Change", "Equity Net Investment", "Debt Net Investment"]].values, steps=len(X_test))
+var_pred = var_result.forecast(merged_data[["Percentage Change", "Equity Net Investment"]].values, steps=len(X_test))
 
 # Plotting
 st.title("NIFTY Predictive Modeling")
