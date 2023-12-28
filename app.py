@@ -35,6 +35,9 @@ equity_features = ["Equity Net Investment"]
 debt_features = ["Debt Net Investment"]
 target = "Percentage Change"
 
+# Filter out rows with NaT values
+merged_data = merged_data[~merged_data["Date"].isna()]
+
 # Sidebar with date selector
 selected_date = st.sidebar.date_input("Select Date", min_value=merged_data["Date"].min(), max_value=merged_data["Date"].max())
 
