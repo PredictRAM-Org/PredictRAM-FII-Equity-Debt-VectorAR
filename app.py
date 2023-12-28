@@ -248,3 +248,41 @@ plt.plot(y_test.index, arima_pred_debt, label="ARIMA Prediction for Debt")
 plt.plot(y_test.index, var_pred_debt[:, 0], label="VAR Prediction for Debt")
 plt.legend()
 st.pyplot(plt)
+
+# Plotting for Equity and NIFTY (Date-wise)
+st.title("Comparison of Equity Predictions with NIFTY Percentage Change (Date-wise)")
+for i in range(len(y_test)):
+    date = y_test.index[i]
+    
+    plt.figure(figsize=(6, 4))
+    plt.plot([date, date], [y_test.iloc[i], linear_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], rf_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], gb_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], lstm_pred_equity[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], arima_pred_equity.iloc[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], var_pred_equity[i, 0]], label="Actual and Predicted NIFTY Percentage Change")
+    
+    plt.title(f"Date: {date}")
+    plt.xlabel("Model Predictions")
+    plt.ylabel("NIFTY Percentage Change")
+    plt.legend()
+    st.pyplot(plt)
+
+# Plotting for Debt and NIFTY (Date-wise)
+st.title("Comparison of Debt Predictions with NIFTY Percentage Change (Date-wise)")
+for i in range(len(y_test)):
+    date = y_test.index[i]
+    
+    plt.figure(figsize=(6, 4))
+    plt.plot([date, date], [y_test.iloc[i], linear_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], rf_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], gb_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], lstm_pred_debt[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], arima_pred_debt.iloc[i]], label="Actual and Predicted NIFTY Percentage Change")
+    plt.plot([date, date], [y_test.iloc[i], var_pred_debt[i, 0]], label="Actual and Predicted NIFTY Percentage Change")
+    
+    plt.title(f"Date: {date}")
+    plt.xlabel("Model Predictions")
+    plt.ylabel("NIFTY Percentage Change")
+    plt.legend()
+    st.pyplot(plt)
