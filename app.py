@@ -14,12 +14,11 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 import matplotlib.pyplot as plt
 
-# Load NIFTY data
 nifty_data = pd.read_excel("NIFTY.xlsx")
 
 # Check if 'Date' column exists in nifty_data
 if 'Date' not in nifty_data.columns:
-    raise KeyError("Column 'Date' not found in NIFTY data.")
+    raise KeyError("Column 'Date' not found in NIFTY data. Available columns: {}".format(nifty_data.columns))
 
 # Load FII data
 fii_data = pd.read_excel("FII.xlsx", sheet_name="Equity")  # Assuming the Equity sheet is used
