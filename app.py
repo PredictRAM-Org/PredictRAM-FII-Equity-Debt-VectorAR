@@ -16,7 +16,7 @@ from tensorflow.keras.layers import LSTM, Dense
 import matplotlib.pyplot as plt
 
 # Load Nifty data
-nifty_data = pd.read_excel("nifty.xlsx")
+nifty_data = pd.read_excel("NIFTY.xlsx")
 
 # Load Equity and Debt data
 equity_data = pd.read_excel("investment_data.xlsx", sheet_name="Equity")
