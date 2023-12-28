@@ -19,8 +19,8 @@ import matplotlib.pyplot as plt
 nifty_data = pd.read_excel("NIFTY.xlsx")
 
 # Load Equity and Debt data
-equity_data = pd.read_excel("investment_data.xlsx", sheet_name="Equity")
-debt_data = pd.read_excel("investment_data.xlsx", sheet_name="Debt")
+equity_data = pd.read_excel("FII.xlsx", sheet_name="Equity")
+debt_data = pd.read_excel("FII.xlsx", sheet_name="Debt")
 
 # Merge Nifty, Equity, and Debt data
 merged_data = pd.merge(nifty_data, equity_data, on="Date", how="left")
